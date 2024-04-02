@@ -14,5 +14,7 @@ namespace Projeto.Core.Context.UsuarioContext.Models
         }
         public int Id { get; set; }
         public CredencialEnum Titulo { get; set; }
+
+        public IEnumerable<Usuario>? Usuarios { get; set; }
     }
 }

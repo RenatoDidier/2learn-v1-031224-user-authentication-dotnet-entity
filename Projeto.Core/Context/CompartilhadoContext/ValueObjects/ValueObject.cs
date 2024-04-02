@@ -2,7 +2,7 @@
 
 namespace Projeto.Core.Context.CompartilhadoContext.ValueObjects
 {
-    public class ValueObject : Notifiable<Notification>
+    public abstract class ValueObject : Notifiable<Notification>
     {
 
     }

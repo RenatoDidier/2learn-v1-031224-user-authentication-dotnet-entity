@@ -2,7 +2,7 @@
 
 namespace Projeto.Core.Context.CompartilhadoContext.UseCases
 {
-    public class ResponsePadrao
+    public abstract class ResponsePadrao
     {
         public string? Mensagem { get; set; }
         public int Status { get; set; } = 400;
