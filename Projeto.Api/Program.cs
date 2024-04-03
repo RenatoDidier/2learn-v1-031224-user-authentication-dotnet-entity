@@ -6,8 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AdicionarConfiguracaoSegredos();
 builder.AdicionarBanco();
+builder.AdicionarMediator();
 
 builder.Services.AddControllers();
+builder.Services.AdicionarDependenciaRepositorios();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -22,5 +22,11 @@ namespace Projeto.Api.Extensions
             ConfiguracoesGlobal.SegredosSenha.JwtChave =
                 builder.Configuration.GetSection("SenhaSegredos").GetValue<string>("JwtChave") ?? string.Empty;
         }
+
+        public static void AdicionarMediator(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddMediatR(x 
+                => x.RegisterServicesFromAssembly(typeof(ConfiguracoesGlobal).Assembly));
+        }
     }
 }

@@ -10,21 +10,6 @@ namespace Projeto.Core.Context.UsuarioContext.Models
         public Nome Nome { get; set; } = null!;
         public Email Email { get; set; } = null!;
         public Senha Senha { get; set; } = null!;
-        public IEnumerable<Credencial> Credenciais { get; set; } = null!;
-        public void AdicionarCredenciais(List<CredencialEnum> credenciais)
-        {
-            var listaCredenciais = new List<Credencial>();
-
-            for (int i = 0; i < credenciais.Count; i++)
-            {
-                if (!System.Enum.IsDefined(typeof(CredencialEnum), credenciais[i]))
-                    AddNotification("Credencial", "Foi fornecido uma credencial inválida");
-
-                Credencial credencialAdicionado = new(credenciais[i]);
-                listaCredenciais.Add(credencialAdicionado);
-            }
-
-            Credenciais = listaCredenciais;
-        }
+        public List<Credencial> Credenciais { get; set; } = null!;
     }
 }

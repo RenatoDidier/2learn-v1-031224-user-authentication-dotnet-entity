@@ -19,6 +19,11 @@ namespace Projeto.Core.Context.UsuarioContext.ValueObjects
         public string PrimeiroNome { get; set; } = string.Empty;
         public string UltimoSobrenome { get; set; } = string.Empty;
 
+        public override string ToString()
+        {
+            return $"{PrimeiroNome} {UltimoSobrenome}";
+        }
+
         public void ValidarPreenchimentoDados()
         {
             AddNotifications(
