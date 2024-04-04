@@ -23,7 +23,7 @@ namespace Projeto.Core.Context.UsuarioContext.ValueObjects
             if (string.IsNullOrWhiteSpace(senhaUsuario))
                 AddNotification("Senha", "Senha inválida");
 
-            else if (!string.IsNullOrEmpty(senhaUsuario) && (senhaUsuario.Length <= 8 || senhaUsuario.Length > 20))
+            else if (!string.IsNullOrEmpty(senhaUsuario) && (senhaUsuario.Length < 8 || senhaUsuario.Length > 25))
                 AddNotification("Senha", "A senha deve conter entre 8 a 20 caracteres");
 
             else
@@ -63,8 +63,8 @@ namespace Projeto.Core.Context.UsuarioContext.ValueObjects
 
         #region 02. Função - Validar Hash
         public static bool ValidarHash(
-                string hash,
                 string senha,
+                string hash,
                 short tamanhoChave = TamanhoChave,
                 int interacoes = Interacoes,
                 char caracterSeparacao = CaracterSeparacao

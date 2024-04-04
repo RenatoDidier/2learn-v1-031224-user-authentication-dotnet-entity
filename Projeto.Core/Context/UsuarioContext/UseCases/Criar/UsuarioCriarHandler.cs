@@ -43,6 +43,17 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Criar
             novoUsuario.Email = email;
             novoUsuario.Credenciais = new();
 
+            novoUsuario.AddNotifications(nome);
+            novoUsuario.AddNotifications(senha);
+            novoUsuario.AddNotifications(email);
+
+            if (!novoUsuario.IsValid)
+                return new UsuarioCriarResponse(401, "Dados incorretos", novoUsuario.Notifications);
+
+            #endregion
+
+            #region Validar se usuário existe
+
             foreach (var credencialUsuario in request.Credenciais)
             {
                 var retornoCredencial = await _repository.BuscarCredencialAsync(credencialUsuario, new CancellationToken());

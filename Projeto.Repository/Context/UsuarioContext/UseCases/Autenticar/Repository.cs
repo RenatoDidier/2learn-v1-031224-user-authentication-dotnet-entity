@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Projeto.Core.Context.CompartilhadoContext.Extensions;
 using Projeto.Core.Context.UsuarioContext.Models;
 using Projeto.Core.Context.UsuarioContext.UseCases.Autenticar.Contratos;
 using Projeto.Repository.Data;
@@ -8,62 +7,25 @@ namespace Projeto.Repository.Context.UsuarioContext.UseCases.Autenticar
 {
     public class Repository : IRepository
     {
-        private readonly AppDbContext _context;
+        public readonly AppDbContext _context;
         public Repository(AppDbContext context)
+            => _context = context;
+        public async Task<Usuario?> BuscarUsuarioCompletoAsync(string email, CancellationToken cancellationToken)
         {
-            _context = context;
-        }
-        public async Task<Usuario?> BuscarUsuarioAsync(string email, CancellationToken cancellationToken)
-        {
-            Usuario? usuarioEncontrado = new();
-
+            Usuario? retornoUsuario = new();
             try
             {
-                usuarioEncontrado = await _context.Usuarios
-                                            .Where(x => x.Email.Endereco == email)
-                                            .FirstOrDefaultAsync();
+                retornoUsuario = await _context
+                                    .Usuarios
+                                    .Include(u => u.Credenciais)
+                                    .Where(u => u.Email.Endereco == email)
+                                    .FirstOrDefaultAsync();
 
-                return usuarioEncontrado;
-
-            } catch (Exception ex)
+                return retornoUsuario;
+            } catch (Exception ex) 
             {
                 Console.WriteLine(ex.Message);
-                return usuarioEncontrado;
-            }
-        }
-
-        public async Task<bool> RenovarCodigoVerificacaoAsync(Usuario usuario, CancellationToken cancellationToken)
-        {
-            try
-            {
-                usuario.Email.Validacao.RenovarCodigoValidacao();
-
-                _context.Usuarios.Update(usuario);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return true;
-
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-
-        }
-
-        public async Task<bool> ValidarContaUsuarioAsync(Usuario usuario, CancellationToken cancellationToken)
-        {
-            try
-            {
-                _context.Usuarios.Update(usuario);
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return true;
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
+                return retornoUsuario;
             }
         }
     }

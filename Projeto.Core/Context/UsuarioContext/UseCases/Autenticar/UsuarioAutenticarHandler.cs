@@ -1,55 +1,35 @@
-﻿using MediatR;
+﻿
+using MediatR;
+using Projeto.Core.Context.UsuarioContext.Models;
 using Projeto.Core.Context.UsuarioContext.UseCases.Autenticar.Contratos;
+using Projeto.Core.Context.UsuarioContext.ValueObjects;
 
 namespace Projeto.Core.Context.UsuarioContext.UseCases.Autenticar
 {
     public class UsuarioAutenticarHandler : IRequestHandler<UsuarioAutenticarRequest, UsuarioAutenticarResponse>
     {
         private readonly IRepository _repository;
+
         public UsuarioAutenticarHandler(IRepository repository)
-        {
-            _repository = repository;
-        }
+            => _repository = repository;            
         public async Task<UsuarioAutenticarResponse> Handle(UsuarioAutenticarRequest request, CancellationToken cancellationToken)
         {
-            #region 01. Fail Fast Validation
+            #region 01. Verificar Requisição
             var failFastValidation = ValidadorRequest.GarantirRequisicao(request);
 
             if (!failFastValidation.IsValid)
-                return new UsuarioAutenticarResponse(400, "Erro na requisição", failFastValidation.Notifications);
+                return new UsuarioAutenticarResponse(400, "Problema na requisição", failFastValidation.Notifications);
             #endregion
 
-            #region 02. Buscar Usuário
-            var usuarioEncontrado = await _repository.BuscarUsuarioAsync(request.Email, new CancellationToken());
+            #region 02. Buscar usuário completo no banco
+            Usuario? usuarioEncontrado = new();
 
-            if (usuarioEncontrado == null)
-                return new UsuarioAutenticarResponse(401, "E-mail de validação incorreto");
-            #endregion
-
-            #region 03. Verificar o Código - Caso desatualizado, reenviar
-            bool codigoExpirado = usuarioEncontrado.Email.Validacao.ValidarCodigoUsuario(request.CodigoValidacao);
-
-            if (codigoExpirado)
-            {
-                var gerarNovoCodigo = await _repository.RenovarCodigoVerificacaoAsync(usuarioEncontrado, new CancellationToken());
-
-                if (!gerarNovoCodigo)
-                    return new UsuarioAutenticarResponse(402, "Problema para gerar um novo código");
-
-            }
-                
-
-            if (!usuarioEncontrado.Email.Validacao.IsValid)
-                return new UsuarioAutenticarResponse(402, "Código Validação", usuarioEncontrado.Email.Validacao.Notifications);
-            #endregion
-
-            #region 04. Validar o Código
             try
             {
-                var resultado = await _repository.ValidarContaUsuarioAsync(usuarioEncontrado, new CancellationToken());
+                usuarioEncontrado = await _repository.BuscarUsuarioCompletoAsync(request.Email, new CancellationToken());
 
-                if (!resultado)
-                    return new UsuarioAutenticarResponse(403, "Problema para autenticar o usuário");
+                if (usuarioEncontrado == null)
+                    return new UsuarioAutenticarResponse(401, "E-mail inválido");
 
             } catch (Exception ex)
             {
@@ -58,8 +38,27 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Autenticar
             }
             #endregion
 
-            #region 05. Retornar para o usuário
-            return new UsuarioAutenticarResponse("Usuário autenticado com sucesso");
+            #region 03. Validar se conta está ativa
+            if (!usuarioEncontrado.Email.Validacao.UsuarioValidado)
+                return new UsuarioAutenticarResponse(402, "Usuário ainda não foi validado");
+            #endregion
+
+            #region 04. Validar se a senha passada é a correta
+            if (!Senha.ValidarHash(request.Senha, usuarioEncontrado.Senha.HashSenha))
+                return new UsuarioAutenticarResponse(403, "Usuário inválido");
+            #endregion
+
+            #region 05. Preencher informações de retorno
+            DadosRetornoUsuarioAutenticado dadosRetorno = new();
+            dadosRetorno.Id = usuarioEncontrado.Id;
+            dadosRetorno.Nome = usuarioEncontrado.Nome.ToString();
+            dadosRetorno.Email = usuarioEncontrado.Email.ToString();
+
+            dadosRetorno.Credenciais = usuarioEncontrado.Credenciais.Select(x => x.Titulo);
+            #endregion
+
+            #region 06. Retornar dados para o usuário
+            return new UsuarioAutenticarResponse("Login efetuado com sucesso", dadosRetorno);
             #endregion
         }
     }
