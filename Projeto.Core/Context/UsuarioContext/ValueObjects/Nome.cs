@@ -29,10 +29,10 @@ namespace Projeto.Core.Context.UsuarioContext.ValueObjects
             AddNotifications(
                     new Contract<Nome>()
                         .Requires()
-                        .IsGreaterOrEqualsThan(4, PrimeiroNome.Length, "PrimeiroNome", "O nome precisa ter mais do que 4 caracteres")
-                        .IsLowerOrEqualsThan(80, PrimeiroNome.Length, "PrimeiroNome", "O nome precisa ter menos do que 80 caracteres")
-                        .IsGreaterOrEqualsThan(4, UltimoSobrenome.Length, "UltimoSobrenome", "O sobrenome precisa ter mais do que 4 caracteres")
-                        .IsLowerOrEqualsThan(80, UltimoSobrenome.Length, "UltimoSobrenome", "O sobrenome precisa ter menos do que 80 caracteres")
+                        .IsGreaterOrEqualsThan(PrimeiroNome, 4, "PrimeiroNome", "O nome precisa ter mais do que 4 caracteres")
+                        .IsLowerOrEqualsThan(PrimeiroNome, 80, "PrimeiroNome", "O nome precisa ter menos do que 80 caracteres")
+                        .IsGreaterOrEqualsThan(UltimoSobrenome, 4, "UltimoSobrenome", "O sobrenome precisa ter mais do que 4 caracteres")
+                        .IsLowerOrEqualsThan(UltimoSobrenome, 80, "UltimoSobrenome", "O sobrenome precisa ter menos do que 80 caracteres")
                 );
         }
     }
