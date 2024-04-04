@@ -1,8 +1,18 @@
+using Projeto.Api.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.AdicionarConfiguracaoSegredos();
+builder.AdicionarBanco();
+builder.AdicionarMediator();
+builder.AdicionarAutenticacao();
+builder.AdicionarPolicies();
+
 builder.Services.AddControllers();
+builder.Services.AdicionarDependenciaRepositorios();
+builder.Services.AdicionarDependenciaServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -18,6 +28,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
