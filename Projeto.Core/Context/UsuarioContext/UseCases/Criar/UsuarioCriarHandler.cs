@@ -49,6 +49,7 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Criar
 
                 if (retornoCredencial != null)
                     novoUsuario.Credenciais.Add(retornoCredencial);
+                // Esse aqui pode ser utilizado para criar novas credenciais no banco, no entanto, já que estou utilizando ENUM, tudo já vai estar cadastrado previamente no banco
                 //else
                 //{
                 //    Credencial novaCredencial = new();
@@ -58,7 +59,7 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Criar
             }
 
             if (!novoUsuario.IsValid)
-                return new UsuarioCriarResponse(402, null, novoUsuario.Notifications);
+                return new UsuarioCriarResponse(403, "Ocorreu um problema para cadastrar o usuário");
 
             #endregion
 
@@ -83,11 +84,9 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Criar
             #endregion
 
             #region Retornar os valores para o usuário
-
             RespostaCriarUsuarioDto respostaUsuario = new(novoUsuario.Nome.ToString(), novoUsuario.Email.ToString());
 
             return new UsuarioCriarResponse("Usuário criado com sucesso", respostaUsuario);
-
             #endregion
 
         }
