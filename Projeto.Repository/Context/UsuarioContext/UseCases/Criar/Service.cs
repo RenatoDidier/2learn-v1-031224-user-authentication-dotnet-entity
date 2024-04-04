@@ -12,9 +12,9 @@ namespace Projeto.Repository.Context.UsuarioContext.UseCases.Criar
         {
             try
             {
-                SendGridClient apiSendGrid = new(ConfiguracoesGlobal.DadosSendGrid.ApiSendgrid);
+                SendGridClient apiSendGrid = new(ConfiguracoesGlobal.DadosSendGrid.ApiSendGrid);
                 EmailAddress remetente = new(ConfiguracoesGlobal.DadosSendGrid.EmailRemetente, ConfiguracoesGlobal.DadosSendGrid.NomeRemetente);
-                string titulo = "Código de verificação";
+                const string titulo = "Código de verificação";
 
                 EmailAddress destinatario = new(usuario.Email.ToString(), usuario.Nome.ToString());
                 string conteudoEmail = $"O seu código de verificação é: {usuario.Email.Validacao.Codigo}";

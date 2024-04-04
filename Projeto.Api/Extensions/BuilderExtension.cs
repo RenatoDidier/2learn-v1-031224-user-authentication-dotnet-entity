@@ -26,7 +26,7 @@ namespace Projeto.Api.Extensions
                 builder.Configuration.GetSection("SenhaSegredos").GetValue<string>("JwtChave") ?? string.Empty;
 
 
-            ConfiguracoesGlobal.DadosSendGrid.ApiSendgrid =
+            ConfiguracoesGlobal.DadosSendGrid.ApiSendGrid =
                 builder.Configuration.GetSection("SendGridSegredos").GetValue<string>("ChaveApi") ?? string.Empty;
             ConfiguracoesGlobal.DadosSendGrid.NomeRemetente =
                 builder.Configuration.GetSection("SendGridSegredos").GetValue<string>("NomeRemetente") ?? string.Empty;

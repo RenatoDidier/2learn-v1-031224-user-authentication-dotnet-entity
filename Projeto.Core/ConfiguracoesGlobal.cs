@@ -18,7 +18,7 @@
 
         public class ConfiguracaoSendGrid
         {
-            public string ApiSendgrid { get; set; } = string.Empty;
+            public string ApiSendGrid { get; set; } = string.Empty;
             public string NomeRemetente { get; set; } = string.Empty;
             public string EmailRemetente { get; set; } = string.Empty;
         }
