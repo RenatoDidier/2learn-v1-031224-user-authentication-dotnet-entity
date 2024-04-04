@@ -4,6 +4,7 @@ using Projeto.Core.Context.UsuarioContext.UseCases.ValidarConta;
 using Projeto.Core.Context.UsuarioContext.UseCases.Autenticar;
 using Projeto.Core.Context.UsuarioContext.UseCases.Criar;
 using Projeto.Api.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Projeto.Api.Controllers;
 
@@ -61,4 +62,33 @@ public class UsuarioController : ControllerBase
 
         return resposta;
     }
+
+    [Authorize]
+    [HttpGet("/v1/blog/principal")]
+    public string AcessarTelaPrincipal()
+    {
+        return "Tela principal";
+    }
+
+    [Authorize(Policy = "Convidado")]
+    [HttpGet("/v1/blog/convidado")]
+    public string AcessarTelaConvidado()
+    {
+        return "Tela convidado";
+    }
+
+    [Authorize(Policy = "Usuario")]
+    [HttpGet("/v1/blog/usuario")]
+    public string AcessarTelaUsuario()
+    {
+        return "Tela usuário";
+    }
+
+    [Authorize(Policy = "Administrador")]
+    [HttpGet("/v1/blog/administrador")]
+    public string AcessarTelaAdministrador()
+    {
+        return "Tela administrador";
+    }
+
 }

@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Projeto.Core;
 using Projeto.Repository.Data;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace Projeto.Api.Extensions
 {
@@ -27,6 +30,25 @@ namespace Projeto.Api.Extensions
         {
             builder.Services.AddMediatR(x 
                 => x.RegisterServicesFromAssembly(typeof(ConfiguracoesGlobal).Assembly));
+        }
+
+        public static void AdicionarAutenticacao(this WebApplicationBuilder builder)
+        {
+            byte[] chave = Encoding.ASCII.GetBytes(ConfiguracoesGlobal.SegredosSenha.JwtChave);
+
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(chave),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                }
+            );
         }
     }
 }

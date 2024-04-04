@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AdicionarConfiguracaoSegredos();
 builder.AdicionarBanco();
 builder.AdicionarMediator();
+builder.AdicionarAutenticacao();
+builder.AdicionarPolicies();
 
 builder.Services.AddControllers();
 builder.Services.AdicionarDependenciaRepositorios();
@@ -25,6 +27,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
