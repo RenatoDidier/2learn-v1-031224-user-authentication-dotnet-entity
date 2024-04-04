@@ -8,10 +8,12 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Criar
     public class UsuarioCriarHandler : IRequestHandler<UsuarioCriarRequest, UsuarioCriarResponse>
     {
         private readonly IRepository _repository;
+        private readonly IService _service;
 
-        public UsuarioCriarHandler(IRepository repository)
+        public UsuarioCriarHandler(IRepository repository, IService service)
         {
             _repository = repository;
+            _service = service;
         }
         public async Task<UsuarioCriarResponse> Handle(UsuarioCriarRequest request, CancellationToken cancellationToken)
         {
@@ -91,7 +93,10 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Criar
             #endregion
 
             #region Envio de e-mail para usuário
+            bool envioCodigoEmail = await _service.EnviarEmailUsuario(novoUsuario, new CancellationToken());
 
+            if (!envioCodigoEmail)
+                return new UsuarioCriarResponse(202, "Usuário criado com sucesso, no entanto, problema para enviar o e-mail");
             #endregion
 
             #region Retornar os valores para o usuário

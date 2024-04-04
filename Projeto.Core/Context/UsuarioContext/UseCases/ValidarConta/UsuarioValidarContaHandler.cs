@@ -1,14 +1,15 @@
 ﻿using MediatR;
-using Projeto.Core.Context.UsuarioContext.UseCases.ValidarConta.Contratos;
 
 namespace Projeto.Core.Context.UsuarioContext.UseCases.ValidarConta
 {
     public class UsuarioValidarContaHandler : IRequestHandler<UsuarioValidarContaRequest, UsuarioValidarContaResponse>
     {
-        private readonly IRepository _repository;
-        public UsuarioValidarContaHandler(IRepository repository)
+        private readonly ValidarConta.Contratos.IRepository _repository;
+        private readonly Criar.Contratos.IService _service;
+        public UsuarioValidarContaHandler(ValidarConta.Contratos.IRepository repository, Criar.Contratos.IService service)
         {
             _repository = repository;
+            _service = service;
         }
         public async Task<UsuarioValidarContaResponse> Handle(UsuarioValidarContaRequest request, CancellationToken cancellationToken)
         {
@@ -35,6 +36,11 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.ValidarConta
 
                 if (!gerarNovoCodigo)
                     return new UsuarioValidarContaResponse(402, "Problema para gerar um novo código");
+
+                var envioEmailUsuario = await _service.EnviarEmailUsuario(usuarioEncontrado, new CancellationToken());
+
+                if (!envioEmailUsuario)
+                    return new UsuarioValidarContaResponse(403, "Problema para enviar o código para o usuário");
 
             }
                 

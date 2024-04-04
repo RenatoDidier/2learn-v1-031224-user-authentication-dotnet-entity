@@ -24,6 +24,14 @@ namespace Projeto.Api.Extensions
                 builder.Configuration.GetSection("SenhaSegredos").GetValue<string>("ChaveSalt") ?? string.Empty;
             ConfiguracoesGlobal.SegredosSenha.JwtChave =
                 builder.Configuration.GetSection("SenhaSegredos").GetValue<string>("JwtChave") ?? string.Empty;
+
+
+            ConfiguracoesGlobal.DadosSendGrid.ApiSendgrid =
+                builder.Configuration.GetSection("SendGridSegredos").GetValue<string>("ChaveApi") ?? string.Empty;
+            ConfiguracoesGlobal.DadosSendGrid.NomeRemetente =
+                builder.Configuration.GetSection("SendGridSegredos").GetValue<string>("NomeRemetente") ?? string.Empty;
+            ConfiguracoesGlobal.DadosSendGrid.EmailRemetente =
+                builder.Configuration.GetSection("SendGridSegredos").GetValue<string>("EmailRemetente") ?? string.Empty;
         }
 
         public static void AdicionarMediator(this WebApplicationBuilder builder)

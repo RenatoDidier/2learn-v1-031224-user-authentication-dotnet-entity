@@ -21,5 +21,13 @@ namespace Projeto.Api.Extensions
                 >();
 
         }
+
+        public static void AdicionarDependenciaServices(this IServiceCollection services)
+        {
+            services.AddTransient<
+                    Projeto.Core.Context.UsuarioContext.UseCases.Criar.Contratos.IService,
+                    Projeto.Repository.Context.UsuarioContext.UseCases.Criar.Service
+                >();
+        }
     }
 }
