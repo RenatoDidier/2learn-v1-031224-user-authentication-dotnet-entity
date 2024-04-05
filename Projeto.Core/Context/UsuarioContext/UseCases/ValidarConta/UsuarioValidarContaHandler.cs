@@ -35,15 +35,13 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.ValidarConta
                 var gerarNovoCodigo = await _repository.RenovarCodigoVerificacaoAsync(usuarioEncontrado, new CancellationToken());
 
                 if (!gerarNovoCodigo)
-                    return new UsuarioValidarContaResponse(402, "Problema para gerar um novo código");
+                    return new UsuarioValidarContaResponse(404, "Problema para gerar um novo código");
 
                 var envioEmailUsuario = await _service.EnviarEmailUsuario(usuarioEncontrado, new CancellationToken());
 
                 if (!envioEmailUsuario)
                     return new UsuarioValidarContaResponse(403, "Problema para enviar o código para o usuário");
-
             }
-                
 
             if (!usuarioEncontrado.Email.Validacao.IsValid)
                 return new UsuarioValidarContaResponse(402, "Código Validação", usuarioEncontrado.Email.Validacao.Notifications);
