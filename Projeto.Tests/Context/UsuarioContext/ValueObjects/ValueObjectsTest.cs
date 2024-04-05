@@ -1,4 +1,5 @@
-﻿using Projeto.Core.Context.UsuarioContext.ValueObjects;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Projeto.Core.Context.UsuarioContext.ValueObjects;
 
 namespace Projeto.Tests.Context.UsuarioContext.ValueObjects
 {
