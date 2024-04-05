@@ -28,7 +28,7 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Criar
             var existeUsuario = await _repository.ValidarExistenciaUsuarioAsync(request.Email);
 
             if (existeUsuario)
-                return new UsuarioCriarResponse(400, "E-mail cadastrado inválido");
+                return new UsuarioCriarResponse(401, "E-mail cadastrado inválido");
 
             #endregion
 
@@ -49,13 +49,6 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Criar
             novoUsuario.AddNotifications(senha);
             novoUsuario.AddNotifications(email);
 
-            if (!novoUsuario.IsValid)
-                return new UsuarioCriarResponse(401, "Dados incorretos", novoUsuario.Notifications);
-
-            #endregion
-
-            #region Validar se usuário existe
-
             foreach (var credencialUsuario in request.Credenciais)
             {
                 var retornoCredencial = await _repository.BuscarCredencialAsync(credencialUsuario, new CancellationToken());
@@ -72,7 +65,7 @@ namespace Projeto.Core.Context.UsuarioContext.UseCases.Criar
             }
 
             if (!novoUsuario.IsValid)
-                return new UsuarioCriarResponse(403, "Ocorreu um problema para cadastrar o usuário");
+                return new UsuarioCriarResponse(402, "Ocorreu um problema para cadastrar o usuário", novoUsuario.Notifications);
 
             #endregion
 

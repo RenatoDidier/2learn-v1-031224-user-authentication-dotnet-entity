@@ -6,12 +6,10 @@ namespace Projeto.Tests.Context.UsuarioContext.UseCases.Autenticar
     [TestClass]
     public class UsuarioAutenticarHandlerTest
     {
-        private readonly FakeAutenticarRepository _repository;
         private readonly UsuarioAutenticarHandler _handler;
         public UsuarioAutenticarHandlerTest()
         {
-            _repository = new FakeAutenticarRepository();
-            _handler = new UsuarioAutenticarHandler(_repository);
+            _handler = new UsuarioAutenticarHandler(new FakeAutenticarRepository());
         }
 
         [TestMethod]
