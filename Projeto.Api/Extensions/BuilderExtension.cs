@@ -58,5 +58,18 @@ namespace Projeto.Api.Extensions
                 }
             );
         }
+
+        public static void AdicionarConfiguracaoCors(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                });
+            });
+        }
     }
 }

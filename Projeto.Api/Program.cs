@@ -9,6 +9,7 @@ builder.AdicionarBanco();
 builder.AdicionarMediator();
 builder.AdicionarAutenticacao();
 builder.AdicionarPolicies();
+builder.AdicionarConfiguracaoCors();
 
 builder.Services.AddControllers();
 builder.Services.AdicionarDependenciaRepositorios();
@@ -30,6 +31,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors();
 
 app.MapControllers();
 
